@@ -12,6 +12,9 @@ addons:
     organization: "felberto-github"
     token:
       secure: ${SONAR_TOKEN}
+env:
+  global:
+    - PGPORT=5433
 
 jdk:
   - openjdk11
