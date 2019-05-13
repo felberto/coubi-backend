@@ -1,5 +1,5 @@
 language: java
-sudo: false
+sudo: true
 install: true
 
 addons:
@@ -22,9 +22,10 @@ jdk:
 services:
   - postgresql
 
-before_script:
-  - psql -c 'create database coubi;' -U postgres
-  - psql -c "create user coubi with password 'coubi';" -U postgres
+before_install:
+  - sudo -u postgres psql -c "CREATE USER coubi WITH PASSWORD 'coubi'"
+  - sudo -u postgres psql -c "ALTER ROLE coubi SUPERUSER"
+  - sudo -u postgres psql -c "CREATE DABABASE coubi"
 
 jobs:
   include:
