@@ -3,16 +3,21 @@ sudo: false
 install: true
 
 addons:
+  postgresql: "10"
+  apt:
+    packages:
+      - postgresql-10
+      - postgresql-client-10
   sonarcloud:
     organization: "felberto-github"
     token:
       secure: ${SONAR_TOKEN}
+env:
+  global:
+    - PGPORT=5433
 
 jdk:
   - openjdk11
-
-services:
-  - postgresql
 
 before_script:
   - psql -c "CREATE DATABASE coubi;" -U postgres
