@@ -11,6 +11,13 @@ addons:
 jdk:
   - openjdk11
 
+services:
+  - postgresql
+
+before_script:
+  - psql -c "CREATE DATABASE coubi;" -U postgres
+  - psql -c "CREATE USER coubi WITH PASSWORD 'coubi';" -U postgres
+
 jobs:
   include:
     - stage: sonar
