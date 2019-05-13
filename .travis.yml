@@ -25,7 +25,7 @@ services:
 before_install:
   - sudo -u postgres psql -c "CREATE USER coubi WITH PASSWORD 'coubi'"
   - sudo -u postgres psql -c "ALTER ROLE coubi SUPERUSER"
-  - sudo -u postgres psql -c "CREATE DABABASE coubi"
+  - sudo -u postgres psql -c "CREATE DATABASE coubi"
 
 jobs:
   include:
