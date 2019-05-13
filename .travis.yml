@@ -18,6 +18,8 @@ env:
     - DB_HOST=localhost
     - DB_PORT=5433
     - DB_NAME=coubi
+    - DB_USER=coubi
+    - DB_USER_PASSWORD=coubi
 
 jdk:
   - openjdk11
