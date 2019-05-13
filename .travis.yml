@@ -15,6 +15,7 @@ addons:
 env:
   global:
     - PGPORT=5433
+    - DB_HOST=localhost
 
 jdk:
   - openjdk11
