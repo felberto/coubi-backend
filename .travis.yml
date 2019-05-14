@@ -28,15 +28,17 @@ before_install:
   - sudo -u postgres psql -c "CREATE USER coubi WITH PASSWORD 'coubi'"
   - sudo -u postgres psql -c "ALTER ROLE coubi SUPERUSER"
   - sudo -u postgres psql -c "CREATE DATABASE coubi"
-after_success:
-  - docker login -u ${DOCKER_USER} -p ${DOCKER_PASS}
-  - export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo $TRAVIS_BRANCH; fi`
-  - export IMAGE_NAME=coubi/coubi-backend
-  - docker build -t $IMAGE_NAME:$COMMIT .
-  - docker tag $IMAGE_NAME:$COMMIT $IMAGE_NAME:$TAG
-  - docker push $IMAGE_NAME
+
 jobs:
   include:
     - stage: sonar
       script:
         - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent org.jacoco:jacoco-maven-plugin:report package sonar:sonar
+    - stage: docker
+      script:
+        - docker login -u ${DOCKER_USER} -p ${DOCKER_PASS}
+        - export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo $TRAVIS_BRANCH; fi`
+        - export IMAGE_NAME=coubi/coubi-backend
+        - docker build -t $IMAGE_NAME:$COMMIT .
+        - docker tag $IMAGE_NAME:$COMMIT $IMAGE_NAME:$TAG
+        - docker push $IMAGE_NAME
