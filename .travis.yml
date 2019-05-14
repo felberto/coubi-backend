@@ -1,17 +1,16 @@
 language: java
 sudo: true
 install: true
-
 addons:
-  postgresql: "10"
+  postgresql: '10'
   apt:
     packages:
       - postgresql-10
       - postgresql-client-10
   sonarcloud:
-    organization: "felberto-github"
+    organization: felberto-github
     token:
-      secure: ${SONAR_TOKEN}
+      secure: "${SONAR_TOKEN}"
 env:
   global:
     - PGPORT=5433
@@ -20,22 +19,24 @@ env:
     - DB_NAME=coubi
     - DB_USER=coubi
     - DB_USER_PASSWORD=coubi
-
 jdk:
   - openjdk11
-
 services:
   - postgresql
-
+  - docker
 before_install:
   - sudo -u postgres psql -c "CREATE USER coubi WITH PASSWORD 'coubi'"
   - sudo -u postgres psql -c "ALTER ROLE coubi SUPERUSER"
   - sudo -u postgres psql -c "CREATE DATABASE coubi"
-
+after_success:
+  - docker login -u ${DOCKER_USER} -p ${DOCKER_PASS}
+  - export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo $TRAVIS_BRANCH; fi`
+  - export IMAGE_NAME=coubi/coubi-backend
+  - docker build -t $IMAGE_NAME:$COMMIT .
+  - docker tag $IMAGE_NAME:$COMMIT $IMAGE_NAME:$TAG
+  - docker push $IMAGE_NAME
 jobs:
   include:
     - stage: sonar
       script:
-        # JaCoCo is used to have code coverage, the agent has to be activated
         - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent org.jacoco:jacoco-maven-plugin:report package sonar:sonar
-
