@@ -42,5 +42,5 @@ jobs:
         - docker login -u $DOCKER_USER -p $DOCKER_PASS
         - export IMAGE_NAME=coubi-backend
         - docker build -f Dockerfile -t $IMAGE_NAME:$COMMIT .
-        - docker tag $IMAGE_NAME:latest $DOCKER_USER:$TAG
-        - docker push $DOCKER_USER:$TAG
+        - docker tag $IMAGE_NAME:latest $IMAGE_NAME:$TAG
+        - docker push $IMAGE_NAME:$TAG
