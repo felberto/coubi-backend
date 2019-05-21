@@ -41,6 +41,6 @@ jobs:
         - export TAG=`if [ ! -z "$TRAVIS_TAG" ]; then echo "$TRAVIS_TAG"; else echo "$TRAVIS_BRANCH--$COMMIT"; fi`
         - docker login -u $DOCKER_USER -p $DOCKER_PASS
         - export IMAGE_NAME=coubi-backend
-        - docker build -f Dockerfile -t $IMAGE_NAME:$COMMIT .
-        - docker tag $IMAGE_NAME:latest $IMAGE_NAME:$TAG
-        - docker push $IMAGE_NAME:$TAG
+        - docker build -f Dockerfile -t $DOCKER_USER/$IMAGE_NAME:$COMMIT .
+        - docker tag $DOCKER_USER/$IMAGE_NAME:$COMMIT $DOCKER_USER/$IMAGE_NAME:$TAG
+        - docker push $DOCKER_USER/$IMAGE_NAME:$TAG
